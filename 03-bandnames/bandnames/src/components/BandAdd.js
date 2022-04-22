@@ -8,7 +8,8 @@ const {socket} = useContext(SocketContext)
 
 
   const onSubmit = (e) => {
-    e.prevendDefault()
+    e.preventDefault()
+
     if (valor.trim().length > 0) { 
       socket.emit('crear-banda', {nombre:valor})
       setValor('') 

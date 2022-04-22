@@ -1,9 +1,11 @@
 import React, { useContext, useEffect } from 'react';
 import { SocketContext } from '../context/SocketContext';
-import { Chart } from 'chart.js';
+import { Chart, registerables } from 'chart.js';
 
 export const BandChart = () => {
-
+    Chart.register(...registerables);
+    
+    
     const { socket } = useContext( SocketContext );
 
     useEffect(() => {
@@ -12,15 +14,21 @@ export const BandChart = () => {
         });
     }, [ socket ])
 
+    
 
     const crearGrafica = ( bands = []) => {
-        const ctx = document.getElementById('myChart');
+        const ctx = document.getElementById('myChart')
+      
+        const chartStatus = Chart.getChart("myChart");
+        if (chartStatus !== undefined) {
+            chartStatus.destroy();
+        }
         new Chart(ctx, {
-            type: 'horizontalBar',
+            type: 'bar',
             data: {
                 labels: bands.map( band => band.name ),
                 datasets: [{
-                    label: '# of Votes',
+                    label: '# de Votos',
                     data: bands.map( band => band.votes ),
                     backgroundColor: [
                         'rgba(255, 99, 132, 0.2)',
@@ -42,12 +50,7 @@ export const BandChart = () => {
                 }]
             },
             options: {
-                animation: false,
-                scales: {
-                    xAxes: [{
-                        stacked: true
-                    }]
-                }
+                indexAxis: 'y',
             }
         });
     }

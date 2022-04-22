@@ -13,14 +13,16 @@ export const BandList = () => {
   }, [socket]);
 
   const cambioNombre = (e, id) => {
-    const newName = e.target.value
-    
-    setBands(bands=>bands.map(band => {
-      if (band.id === id) {
-        band.name =newName;
-      }
-      return band;
-    }));
+    const newName = e.target.value;
+
+    setBands((bands) =>
+      bands.map((band) => {
+        if (band.id === id) {
+          band.name = newName;
+        }
+        return band;
+      })
+    );
   };
 
   const perdioFoco = (id, nombre) => {
@@ -31,18 +33,25 @@ export const BandList = () => {
     socket.emit("votar-banda", id);
   };
 
+  const desvotar = (id) => {
+    socket.emit("desvotar-banda", id);
+  };
+
   const borrar = (id) => {
     socket.emit("borrar-banda", id);
   };
 
   const createRows = () => {
-    return bands.map(band => (
+    return bands.map((band) => (
       <tr key={band.id}>
         <td>
-          <button
-          className="btn btn-primary"
-          onClick={() => votar(band.id)}>
+          <button className="btn btn-primary" onClick={() => votar(band.id)}>
             +1
+          </button>
+        </td>
+        <td>
+          <button className="btn btn-warning" onClick={() => desvotar(band.id)}>
+            -1
           </button>
         </td>
         <td>
@@ -57,9 +66,7 @@ export const BandList = () => {
           <h3>{band.votes}</h3>
         </td>
         <td>
-          <button
-          className="btn btn-danger"
-          onClick={() => borrar(band.id)}>
+          <button className="btn btn-danger" onClick={() => borrar(band.id)}>
             Borrar
           </button>
         </td>
