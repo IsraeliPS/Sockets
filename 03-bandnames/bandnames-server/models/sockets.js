@@ -1,6 +1,9 @@
 const BandList = require('./band-list')
+
 class Sockets {
+
   constructor (io) {
+
     this.io = io
 
     this.bandList = new BandList()
@@ -10,6 +13,8 @@ class Sockets {
   socketEvents () {
     // On connection
     this.io.on('connection', (socket) => {
+
+      
       console.log('Client connected')
 
       // Emits the band list to the client
@@ -18,6 +23,11 @@ class Sockets {
 
       socket.on('votar-banda', (id) => {
         this.bandList.increaseVotes(id)
+        this.io.emit('bandList', this.bandList.getBands())
+      })
+
+      socket.on('desvotar-banda', (id) => {
+        this.bandList.decreaseVotes(id)
         this.io.emit('bandList', this.bandList.getBands())
       })
 

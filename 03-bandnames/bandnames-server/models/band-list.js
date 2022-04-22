@@ -3,7 +3,6 @@ const Band = require('./band')
 class BandList {
   constructor () {
     this.bands = [
-      new Band('The Beatles'),
       new Band('The Rolling Stones'),
       new Band('The Who'),
       new Band('The Doors'),
@@ -31,6 +30,15 @@ class BandList {
     this.bands = this.bands.map(band => {
       if (band.id === id) {
         band.votes += 1
+      }
+      return band
+    })
+  }
+
+  decreaseVotes (id) {
+    this.bands = this.bands.map(band => {
+      if (band.id === id) {
+        band.votes -= 1
       }
       return band
     })
